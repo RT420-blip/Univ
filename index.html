@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#020617">
+<meta name="description" content="Kalkulator Exp Budidaya dan Power Battle untuk game Jujutsu Kaisen - OFFICIAL UNIV">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="UNIV Calc">
+<title>OFFICIAL UNIV - Exp & Power Calculator</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+@font-face{font-family:'JujutsuCustom';src:url(data:font/woff2;base64,=) format('woff2');font-display:swap;}
+:root{--bg:#020617;--card:#0b1224;--cyan:#00f0ff;--text:#e2e8f0;--sub:#94a3b8;--t1:#22c55e;--t2:#eab308;--t3:#ef4444;}
+html,body{height:100%;margin:0;padding:0;background:var(--bg);font-family:sans-serif;overflow:hidden;color:#fff;}
+.app{height:100vh;display:flex;flex-direction:column;}
+.header{padding:12px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(#020617,#0b1224);border-bottom:1px solid rgba(0,240,255,0.1);}
+.logo-wrap{width:72px;height:72px;border-radius:50%;border:2px solid rgba(255,215,0,0.6);display:flex;align-items:center;justify-content:center;overflow:hidden;background:#0b1224;margin:0 auto 8px auto;box-shadow:0 0 10px rgba(255,215,0,0.4),0 0 20px rgba(255,215,0,0.3),0 0 40px rgba(255,215,0,0.2),inset 0 0 15px rgba(255,215,0,0.1);animation:goldPulse 2s ease-in-out infinite;}
+@keyframes goldPulse{0%{box-shadow:0 0 10px rgba(255,215,0,0.4),0 0 20px rgba(255,215,0,0.3),0 0 40px rgba(255,215,0,0.2),inset 0 0 15px rgba(255,215,0,0.1);}50%{box-shadow:0 0 20px rgba(255,215,0,0.6),0 0 40px rgba(255,215,0,0.4),0 0 60px rgba(255,215,0,0.3),inset 0 0 25px rgba(255,215,0,0.2);}100%{box-shadow:0 0 10px rgba(255,215,0,0.4),0 0 20px rgba(255,215,0,0.3),0 0 40px rgba(255,215,0,0.2),inset 0 0 15px rgba(255,215,0,0.1);}}
+.logo-img{max-width:100%;max-height:100%;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(255,215,0,0.5));}
+.title-wrap{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 auto;}
+.title{font-size:20px;font-weight:bold;display:flex;align-items:center;justify-content:center;}
+.title .latin{font-family:'JujutsuCustom';}.title .jp{font-weight:900;margin-left:3px;}
+.badge-wrap{display:flex;align-items:center;justify-content:center;}
+.badge{width:20px;height:20px;animation:pulse 1.5s infinite;display:block;}
+@keyframes pulse{0%{transform:scale(1);opacity:.7}50%{transform:scale(1.3);opacity:1}100%{transform:scale(1);opacity:.7}}
+.subtitle{font-size:11px;color:var(--sub);margin-top:6px;text-align:center;}
+.nav-tabs{display:flex;gap:8px;padding:10px;background:var(--card);border-bottom:1px solid rgba(0,240,255,0.08);}
+.nav-tab{flex:1;padding:10px;border-radius:8px;border:1px solid rgba(0,240,255,0.15);background:#020617;color:var(--sub);font-size:13px;font-weight:bold;cursor:pointer;text-align:center;transition:.2s;}
+.nav-tab.active{background:var(--cyan);color:#000;border-color:var(--cyan);}
+.content{flex:1;display:flex;flex-direction:column;padding:10px;gap:10px;overflow:hidden;}
+.tab-panel{display:none;flex:1;flex-direction:column;gap:10px;overflow:auto;}
+.tab-panel.active{display:flex;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.field{display:flex;flex-direction:column;gap:3px;}
+.full{grid-column:1/-1;}
+label{font-size:10px;color:var(--sub);text-align:center;}
+input,select{padding:8px;border-radius:8px;border:1px solid rgba(0,240,255,0.2);background:#020617;color:#fff;text-align:center;font-size:12px;}
+input:focus,select:focus{outline:none;border-color:var(--cyan);}
+.result{flex:1;overflow:auto;background:var(--card);border-radius:12px;padding:10px;border:1px solid rgba(0,240,255,0.08);}
+.tier-row{display:flex;align-items:center;gap:8px;padding:6px 0;}
+.tier-label{width:28px;font-size:12px;font-weight:bold;color:var(--sub);flex-shrink:0;}
+.tier-progress-wrap{flex:1;min-width:0;}
+.progress{height:8px;background:#111;border-radius:10px;overflow:hidden;}
+.bar{height:100%;width:0%;transition:.3s;}
+.bar.t1{background:var(--t1);}.bar.t2{background:var(--t2);}.bar.t3{background:var(--t3);}
+.tier-info{width:90px;font-size:11px;text-align:right;color:var(--text);flex-shrink:0;white-space:nowrap;}
+.total-bar{height:8px;background:#111;border-radius:20px;overflow:hidden;}
+.total-bar div{height:100%;background:var(--cyan);width:0%;transition:.3s;}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:12px;border-bottom:1px solid rgba(0,240,255,0.08);}
+.summary-label{color:var(--sub);}.summary-value{color:#fff;font-weight:bold;}
+.power-input{padding:12px;border-radius:8px;border:1px solid rgba(0,240,255,0.2);background:#020617;color:#fff;text-align:center;font-size:16px;width:100%;box-sizing:border-box;}
+.power-btn{width:100%;padding:12px;border:none;border-radius:8px;background:var(--cyan);color:#000;font-size:16px;font-weight:bold;cursor:pointer;transition:.2s;margin-top:8px;}
+.power-btn:hover{opacity:.8;}
+.power-result{background:var(--card);border-radius:12px;padding:15px;border:1px solid rgba(0,240,255,0.08);margin-top:10px;display:none;}
+.power-result.show{display:block;}
+.power-result h3{font-size:16px;margin:0 0 12px 0;color:var(--cyan);border-bottom:1px solid rgba(0,240,255,0.1);padding-bottom:8px;}
+.power-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:13px;border-bottom:1px solid rgba(0,240,255,0.06);}
+.power-row:last-child{border-bottom:none;}
+.power-label{color:var(--sub);}.power-value{color:#fff;font-weight:bold;font-size:14px;}
+.power-highlight{color:var(--cyan);font-weight:bold;font-size:15px;}
+.power-section{margin-bottom:15px;}.power-section-title{font-size:12px;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+
+/* Storage Limit Section Styles */
+.storage-section{background:linear-gradient(135deg, rgba(0,240,255,0.05), rgba(255,215,0,0.05));border:1px solid rgba(0,240,255,0.15);border-radius:12px;padding:12px;margin-top:8px;}
+.storage-title{font-size:13px;font-weight:bold;color:var(--cyan);text-align:center;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;}
+.storage-tier{display:flex;flex-direction:column;gap:6px;padding:8px 0;border-bottom:1px solid rgba(0,240,255,0.06);}
+.storage-tier:last-child{border-bottom:none;}
+.storage-tier-header{display:flex;justify-content:space-between;align-items:center;}
+.storage-tier-name{font-size:12px;font-weight:bold;}
+.storage-tier-name.t1{color:var(--t1);}.storage-tier-name.t2{color:var(--t2);}.storage-tier-name.t3{color:var(--t3);}
+.storage-tier-limit{font-size:11px;color:var(--sub);}
+.storage-progress-wrap{width:100%;height:6px;background:#111;border-radius:10px;overflow:hidden;}
+.storage-progress-bar{height:100%;width:0%;transition:.3s;border-radius:10px;}
+.storage-progress-bar.t1{background:var(--t1);}.storage-progress-bar.t2{background:var(--t2);}.storage-progress-bar.t3{background:var(--t3);}
+.storage-details{display:flex;justify-content:space-between;font-size:11px;color:var(--sub);}
+.storage-time{font-size:12px;font-weight:bold;color:var(--cyan);text-align:center;margin-top:4px;}
+.storage-total-time{background:rgba(0,240,255,0.1);border-radius:8px;padding:8px;margin-top:10px;text-align:center;border:1px solid rgba(0,240,255,0.15);}
+.storage-total-time-label{font-size:11px;color:var(--sub);}.storage-total-time-value{font-size:14px;font-weight:bold;color:var(--cyan);}
+.toggle-storage-btn{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(0,240,255,0.3);background:rgba(0,240,255,0.1);color:var(--cyan);font-size:12px;font-weight:bold;cursor:pointer;margin-top:8px;transition:.2s;}
+.toggle-storage-btn:hover{background:rgba(0,240,255,0.2);}
+.storage-panel{display:none;}
+.storage-panel.show{display:block;}
+
+/* Install button */
+.install-btn{position:fixed;bottom:20px;right:20px;padding:12px 20px;border-radius:50px;border:none;background:var(--cyan);color:#000;font-size:14px;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(0,240,255,0.3);display:none;z-index:1000;animation:slideUp 0.3s ease;}
+.install-btn.show{display:block;}
+@keyframes slideUp{from{transform:translateY(100px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="header">
+<div class="logo-wrap">
+<img class="logo-img" src="icon-192.png" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=font-size:30px>🎮</span>';">
+</div>
+<div class="title-wrap">
+<div class="title"><span class="latin">OFFICIAL UNIV</span><span class="jp">ス</span></div>
+<div class="badge-wrap">
+<svg viewBox="0 0 24 24" class="badge">
+<path fill="#1d9bf0" d="M22 12l-2.2 2.5.3 3.3-3.2.8-1.8 2.8-3.1-1.3-3.1 1.3-1.8-2.8-3.2-.8.3-3.3L2 12l2.2-2.5-.3-3.3 3.2-.8L8.9 2.6 12 3.9l3.1-1.3 1.8 2.8 3.2.8-.3 3.3z"/>
+<path fill="#fff" d="M10.2 15.1l-2.4-2.4-1.3 1.3 3.7 3.7 7.4-7.4-1.3-1.3z"/>
+</svg>
+</div>
+</div>
+<div class="subtitle">Kalkulator Exp & Power Battle</div>
+</div>
+<div class="nav-tabs">
+<div class="nav-tab active" onclick="switchTab('exp')">📊 Exp Budidaya</div>
+<div class="nav-tab" onclick="switchTab('power')">⚔️ Power Battle</div>
+</div>
+<div class="content">
+<div class="tab-panel active" id="panel-exp">
+<div class="form-grid">
+<div class="field"><label>Level</label><select id="lvl"></select></div>
+<div class="field"><label>Tier</label><select id="tier"><option value="t1">T1</option><option value="t2">T2</option><option value="t3">T3</option></select></div>
+<div class="field"><label>Exp Sekarang</label><input id="expNow" placeholder="0"></div>
+<div class="field"><label>Exp Hilang</label><input id="expMissing" placeholder="0"></div>
+<div class="field full"><label>Speed Exp / detik</label><input id="speed" value="34" placeholder="34"></div>
+<div class="field"><label>Attack Lvl</label><select id="expBuku"></select></div>
+<div class="field"><label>Jumlah Buku</label><input id="jumlahBuku" placeholder="0"></div>
+<div class="field full"><label>Zona Waktu</label><select id="zona"><option value="7">WIB (UTC+7)</option><option value="8">WITA (UTC+8)</option><option value="9">WIT (UTC+9)</option></select></div>
+</div>
+<div class="result" id="hasil"></div>
+<div class="total-bar"><div id="bar"></div></div>
+
+<!-- Storage Limit 40% Feature -->
+<button class="toggle-storage-btn" onclick="toggleStoragePanel()">📦 Tampilkan/Sembunyikan Perhitungan Batas Penyimpanan 40%</button>
+<div class="storage-panel" id="storagePanel">
+<div class="storage-section">
+<div class="storage-title">🕐 Waktu Full ke Batas Penyimpanan 40% per Tier</div>
+<div id="storageContent"></div>
+<div class="storage-total-time">
+<div class="storage-total-time-label">Total Waktu untuk Full Semua Tier (40%)</div>
+<div class="storage-total-time-value" id="storageTotalTime">-</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="tab-panel" id="panel-power">
+<div style="padding:10px 0;">
+<input type="number" id="powerSaya" class="power-input" placeholder="Masukkan Power Anda">
+<div style="margin-top:10px;">
+<div class="field"><label>Level</label><select id="lvlPower" style="width:100%;"><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option><option value="4">Level 4</option><option value="5">Level 5</option><option value="6">Level 6</option><option value="7">Level 7</option><option value="8">Level 8</option><option value="9">Level 9</option><option value="10">Level 10</option><option value="11">Level 11</option><option value="12">Level 12</option><option value="13">Level 13</option><option value="14">Level 14</option><option value="15" selected>Level 15</option><option value="16">Level 16</option><option value="17">Level 17</option><option value="18">Level 18</option></select></div>
+</div>
+</div>
+<div class="power-result" id="powerHasil">
+<div class="power-section"><div class="power-section-title">Player yang Bisa ATK</div><div class="power-row"><span class="power-label">Minimum Player</span><span class="power-value" id="playerMin">-</span></div><div class="power-row"><span class="power-label">Power Aman</span><span class="power-highlight" id="playerAman">-</span></div></div>
+<div class="power-section"><div class="power-section-title">Player yang Bisa Di ATK</div><div class="power-row"><span class="power-label">Maksimum Player</span><span class="power-value" id="playerMax">-</span></div><div class="power-row"><span class="power-label">Power Aman Di ATK</span><span class="power-highlight" id="playerAmanDiAtk">-</span></div></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Install Button -->
+<button class="install-btn" id="installBtn" onclick="installPWA()">📲 Install App</button>
+
+<script>
+// ===================== SERVICE WORKER REGISTRATION =====================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then((registration) => {
+        console.log('✅ SW registered:', registration.scope);
+      })
+      .catch((err) => {
+        console.log('❌ SW registration failed:', err);
+      });
+  });
+}
+
+// ===================== PWA INSTALL PROMPT =====================
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.classList.add('show');
+});
+
+function installPWA() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then((choiceResult) => {
+    if (choiceResult.outcome === 'accepted') {
+      console.log('User accepted install');
+      installBtn.classList.remove('show');
+    }
+    deferredPrompt = null;
+  });
+}
+
+window.addEventListener('appinstalled', () => {
+  console.log('PWA was installed');
+  installBtn.classList.remove('show');
+  deferredPrompt = null;
+});
+
+// ===================== APP LOGIC =====================
+function switchTab(tab){
+document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+if(tab==='exp'){document.querySelector('.nav-tab:nth-child(1)').classList.add('active');document.getElementById('panel-exp').classList.add('active');}
+else{document.querySelector('.nav-tab:nth-child(2)').classList.add('active');document.getElementById('panel-power').classList.add('active');}
+}
+
+function toggleStoragePanel(){
+const panel=document.getElementById('storagePanel');
+if(panel.classList.contains('show')){panel.classList.remove('show');}
+else{panel.classList.add('show');hitungStorage();}
+}
+
+const levelData={1:[15,20,45],2:[95,400,800],3:[4845,12500,21850],4:[24000,24225,40375],5:[44750,46360,49685],6:[51110,53675,56050],7:[59185,62130,65265],8:[68495,71915,151050],9:[158650,166250,174800],10:[183635,192850,202350],11:[237500,256500,285000],12:[950000,779000,817000],13:[836000,855000,860415],14:[875900,891670,907725],15:[924000,940500,957638],16:[2280000,1710000,1750000],17:[1851500,2037750,2242000],18:[5700000,0,0]};
+const bukuExp={1:0,2:100,3:800,4:1000,5:1500,6:2000,7:3000,8:4000,9:5000,10:6000,11:8000,12:20000,13:25000,14:28000,15:30000,16:45000,17:60000,18:100000};
+
+for(let i=1;i<=18;i++){let d=levelData[i];lvl.innerHTML+=`<option value="${i}" data-t1="${d[0]}" data-t2="${d[1]}" data-t3="${d[2]}">Level ${i}</option>`;}
+for(let i in bukuExp){expBuku.innerHTML+=`<option value="${bukuExp[i]}">Level ${i}</option>`;}
+
+function num(v){v=String(v||"").trim();if(v==="")return 0;return parseFloat(v.replace(/\./g,"").replace(",","."));}
+function spd(v){v=String(v||"").trim();if(v==="")return 1;return parseFloat(v.replace(",","."));}
+function waktu(d){if(!isFinite(d)||d<0)return"0j 0m";let m=Math.ceil(d/60);let h=Math.floor(m/60);let mm=m%60;return(h?h+"j ":"")+mm+"m";}
+
+function hitungExp(){
+let totalExp=num(expNow.value)+num(expMissing.value)+(num(jumlahBuku.value)*num(expBuku.value));
+let o=lvl.options[lvl.selectedIndex];
+let T1=Number(o.dataset.t1||0),T2=Number(o.dataset.t2||0),T3=Number(o.dataset.t3||0);
+let e1=0,e2=0,e3=0,sisa=totalExp;
+if(tier.value=="t1"){e1=Math.min(sisa,T1);sisa-=e1;e2=Math.min(sisa,T2);sisa-=e2;e3=Math.min(sisa,T3);}
+if(tier.value=="t2"){e1=T1;e2=Math.min(sisa,T2);sisa-=e2;e3=Math.min(sisa,T3);}
+if(tier.value=="t3"){e1=T1;e2=T2;e3=Math.min(sisa,T3);}
+let p1=T1?(e1/T1)*100:0,p2=T2?(e2/T2)*100:0,p3=T3?(e3/T3)*100:0;
+let sp=spd(speed.value);if(sp<=0)sp=1;
+let s1=Math.max(T1-e1,0),s2=Math.max(T2-e2,0),s3=Math.max(T3-e3,0);
+let w1=s1/sp,w2=s2/sp,w3=s3/sp;
+let totalDetik=w1+w2+w3;
+let totalMax=T1+T2+T3;
+let totalProgress=totalMax?((e1+e2+e3)/totalMax)*100:0;
+bar.style.width=totalProgress+"%";
+let zonaOffset=parseInt(zona.value);
+let now=new Date();
+let localTime=new Date(now.getTime()+(zonaOffset-7)*3600000);
+let selesai=new Date(localTime.getTime()+totalDetik*1000);
+hasil.innerHTML=`<div class="summary-row"><span class="summary-label">Total Exp</span><span class="summary-value">${Math.floor(totalExp).toLocaleString('id-ID')}</span></div><div class="tier-row"><span class="tier-label" style="color:var(--t1)">T1</span><div class="tier-progress-wrap"><div class="progress"><div class="bar t1" style="width:${p1}%"></div></div></div><span class="tier-info">${Math.floor(e1).toLocaleString('id-ID')} / ${Math.floor(T1).toLocaleString('id-ID')}</span></div><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--sub);padding:0 0 6px 36px;"><span>Sisa: ${Math.floor(s1).toLocaleString('id-ID')}</span><span>${waktu(w1)}</span></div><div class="tier-row"><span class="tier-label" style="color:var(--t2)">T2</span><div class="tier-progress-wrap"><div class="progress"><div class="bar t2" style="width:${p2}%"></div></div></div><span class="tier-info">${Math.floor(e2).toLocaleString('id-ID')} / ${Math.floor(T2).toLocaleString('id-ID')}</span></div><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--sub);padding:0 0 6px 36px;"><span>Sisa: ${Math.floor(s2).toLocaleString('id-ID')}</span><span>${waktu(w2)}</span></div><div class="tier-row"><span class="tier-label" style="color:var(--t3)">T3</span><div class="tier-progress-wrap"><div class="progress"><div class="bar t3" style="width:${p3}%"></div></div></div><span class="tier-info">${Math.floor(e3).toLocaleString('id-ID')} / ${Math.floor(T3).toLocaleString('id-ID')}</span></div><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--sub);padding:0 0 6px 36px;"><span>Sisa: ${Math.floor(s3).toLocaleString('id-ID')}</span><span>${waktu(w3)}</span></div><div class="summary-row"><span class="summary-label">Total Waktu</span><span class="summary-value">${waktu(totalDetik)}</span></div><div class="summary-row"><span class="summary-label">Estimasi Selesai</span><span class="summary-value">${selesai.toLocaleString("id-ID",{timeZone:'UTC'})}</span></div><div class="summary-row" style="border-bottom:none;"><span class="summary-label">Progress Total</span><span class="summary-value">${totalProgress.toFixed(2)}%</span></div>`;
+
+hitungStorage();
+}
+
+function hitungStorage(){
+const panel=document.getElementById('storagePanel');
+if(!panel.classList.contains('show'))return;
+
+let o=lvl.options[lvl.selectedIndex];
+let T1=Number(o.dataset.t1||0),T2=Number(o.dataset.t2||0),T3=Number(o.dataset.t3||0);
+let sp=spd(speed.value);if(sp<=0)sp=1;
+
+let limitT1=Math.floor(T1*0.40);
+let limitT2=Math.floor(T2*0.40);
+let limitT3=Math.floor(T3*0.40);
+
+let timeT1=limitT1/sp;
+let timeT2=limitT2/sp;
+let timeT3=limitT3/sp;
+
+let totalTime=timeT1+timeT2+timeT3;
+
+let html=`
+<div class="storage-tier">
+<div class="storage-tier-header">
+<span class="storage-tier-name t1">📗 Tier 1 (T1)</span>
+<span class="storage-tier-limit">Limit: ${limitT1.toLocaleString('id-ID')} / ${T1.toLocaleString('id-ID')} EXP</span>
+</div>
+<div class="storage-progress-wrap">
+<div class="storage-progress-bar t1" style="width:40%"></div>
+</div>
+<div class="storage-details">
+<span>40% dari ${T1.toLocaleString('id-ID')}</span>
+<span>Speed: ${sp}/detik</span>
+</div>
+<div class="storage-time">⏱️ ${waktu(timeT1)}</div>
+</div>
+
+<div class="storage-tier">
+<div class="storage-tier-header">
+<span class="storage-tier-name t2">📙 Tier 2 (T2)</span>
+<span class="storage-tier-limit">Limit: ${limitT2.toLocaleString('id-ID')} / ${T2.toLocaleString('id-ID')} EXP</span>
+</div>
+<div class="storage-progress-wrap">
+<div class="storage-progress-bar t2" style="width:40%"></div>
+</div>
+<div class="storage-details">
+<span>40% dari ${T2.toLocaleString('id-ID')}</span>
+<span>Speed: ${sp}/detik</span>
+</div>
+<div class="storage-time">⏱️ ${waktu(timeT2)}</div>
+</div>
+
+<div class="storage-tier">
+<div class="storage-tier-header">
+<span class="storage-tier-name t3">📕 Tier 3 (T3)</span>
+<span class="storage-tier-limit">Limit: ${limitT3.toLocaleString('id-ID')} / ${T3.toLocaleString('id-ID')} EXP</span>
+</div>
+<div class="storage-progress-wrap">
+<div class="storage-progress-bar t3" style="width:40%"></div>
+</div>
+<div class="storage-details">
+<span>40% dari ${T3.toLocaleString('id-ID')}</span>
+<span>Speed: ${sp}/detik</span>
+</div>
+<div class="storage-time">⏱️ ${waktu(timeT3)}</div>
+</div>
+`;
+
+document.getElementById('storageContent').innerHTML=html;
+document.getElementById('storageTotalTime').innerText=waktu(totalTime);
+}
+
+function formatAngka(angka){return Math.floor(angka).toLocaleString('id-ID');}
+
+function hitungPower(){
+let powerSaya=parseFloat(document.getElementById("powerSaya").value);
+let levelSaya=parseInt(document.getElementById("lvlPower").value);
+
+if(isNaN(powerSaya)||powerSaya<=0){
+document.getElementById("powerHasil").classList.remove("show");
+return;
+}
+
+let multiplierAnda=(levelSaya>=15)?1.10:1.05;
+
+let playerMin=(powerSaya*0.95)/1.05;
+let playerAman=playerMin*1.01;
+
+let playerMax=(powerSaya*multiplierAnda)/0.95;
+let playerAmanDiAtk=playerMax*0.99;
+
+document.getElementById("playerMin").innerText=formatAngka(playerMin);
+document.getElementById("playerAman").innerText=formatAngka(playerAman);
+document.getElementById("playerMax").innerText=formatAngka(playerMax);
+document.getElementById("playerAmanDiAtk").innerText=formatAngka(playerAmanDiAtk);
+
+document.getElementById("powerHasil").classList.add("show");
+}
+
+document.querySelectorAll("#panel-exp input,#panel-exp select").forEach(e=>{e.addEventListener("input",hitungExp);});
+document.querySelectorAll("#panel-power input,#panel-power select").forEach(e=>{e.addEventListener("input",hitungPower);});
+
+hitungExp();
+</script>
+</body>
+</html>
