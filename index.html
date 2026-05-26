@@ -482,32 +482,36 @@ input:focus,select:focus{
   margin-bottom:6px;
 }
 
-/* ═══════ STORAGE SECTION ═══════ */
+/* ═══════ STORAGE SECTION - SELALU TAMPIL ═══════ */
 .storage-section{
-  background:rgba(11,18,36,0.25);
-  border:1px solid rgba(0,240,255,0.10);
+  background:rgba(11,18,36,0.85);
+  border:2px solid rgba(0,240,255,0.25);
   border-radius:14px;
-  padding:10px;
-  margin-top:6px;
-  box-shadow:0 4px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.03);
+  padding:12px;
+  margin-top:10px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
 }
 
 .storage-title{
-  font-size:12px;
+  font-size:13px;
   font-weight:bold;
   color:var(--cyan);
   text-align:center;
-  margin-bottom:8px;
+  margin-bottom:10px;
   text-transform:uppercase;
   letter-spacing:1px;
+  text-shadow:0 0 8px rgba(0,240,255,0.3);
 }
 
 .storage-tier{
   display:flex;
   flex-direction:column;
-  gap:5px;
-  padding:6px 0;
-  border-bottom:1px solid rgba(0,240,255,0.04);
+  gap:6px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(0,240,255,0.10);
 }
 
 .storage-tier:last-child{
@@ -518,10 +522,12 @@ input:focus,select:focus{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  flex-wrap:wrap;
+  gap:4px;
 }
 
 .storage-tier-name{
-  font-size:12px;
+  font-size:13px;
   font-weight:bold;
 }
 
@@ -530,93 +536,76 @@ input:focus,select:focus{
 .storage-tier-name.t3{color:var(--t3);}
 
 .storage-tier-limit{
-  font-size:11px;
+  font-size:12px;
   color:var(--sub);
+  font-weight:500;
 }
 
 .storage-progress-wrap{
   width:100%;
-  height:6px;
-  background:rgba(0,0,0,0.25);
+  height:8px;
+  background:rgba(0,0,0,0.30);
   border-radius:10px;
   overflow:hidden;
+  margin:4px 0;
 }
 
 .storage-progress-bar{
   height:100%;
-  width:0%;
+  width:40%;
   transition:.3s;
   border-radius:10px;
 }
 
-.storage-progress-bar.t1{background:var(--t1);}
-.storage-progress-bar.t2{background:var(--t2);}
-.storage-progress-bar.t3{background:var(--t3);}
+.storage-progress-bar.t1{background:linear-gradient(90deg, var(--t1), #4ade80);}
+.storage-progress-bar.t2{background:linear-gradient(90deg, var(--t2), #facc15);}
+.storage-progress-bar.t3{background:linear-gradient(90deg, var(--t3), #f87171);}
 
 .storage-details{
   display:flex;
   justify-content:space-between;
-  font-size:11px;
+  font-size:12px;
   color:var(--sub);
+  margin-top:2px;
 }
 
 .storage-time{
-  font-size:12px;
-  font-weight:bold;
-  color:var(--cyan);
-  text-align:center;
-  margin-top:3px;
-}
-
-.storage-total-time{
-  background:rgba(0,240,255,0.06);
-  border-radius:10px;
-  padding:8px;
-  margin-top:8px;
-  text-align:center;
-  border:1px solid rgba(0,240,255,0.12);
-}
-
-.storage-total-time-label{
-  font-size:11px;
-  color:var(--sub);
-}
-
-.storage-total-time-value{
   font-size:14px;
   font-weight:bold;
   color:var(--cyan);
-}
-
-.toggle-storage-btn{
-  width:100%;
-  padding:8px;
-  border-radius:10px;
-  border:1px solid rgba(0,240,255,0.20);
-  background:rgba(0,240,255,0.06);
-  color:var(--cyan);
-  font-size:12px;
-  font-weight:bold;
-  cursor:pointer;
+  text-align:center;
   margin-top:6px;
-  transition:.2s;
+  padding:6px 0;
+  background:rgba(0,240,255,0.08);
+  border-radius:8px;
+  border:1px solid rgba(0,240,255,0.15);
 }
 
-.toggle-storage-btn:hover{
-  background:rgba(0,240,255,0.12);
+.storage-total-time{
+  background:rgba(0,240,255,0.10);
+  border-radius:12px;
+  padding:12px;
+  margin-top:10px;
+  text-align:center;
+  border:2px solid rgba(0,240,255,0.20);
 }
 
-.storage-panel{
-  display:none;
-  flex-direction:column;
-  flex:1;
-  overflow:auto;
-  min-height:0;
+.storage-total-time-label{
+  font-size:12px;
+  color:var(--sub);
+  margin-bottom:4px;
 }
 
-.storage-panel.show{
-  display:flex;
+.storage-total-time-value{
+  font-size:18px;
+  font-weight:bold;
+  color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,240,255,0.3);
 }
+
+/* Hapus toggle button dan panel styles yang tidak diperlukan */
+.toggle-storage-btn{display:none !important;}
+.storage-panel{display:block !important;}
 
 /* ═══════ INSTALL BUTTON ═══════ */
 .install-btn{
@@ -706,15 +695,13 @@ input:focus,select:focus{
 <div class="result" id="hasil"></div>
 <div class="total-bar"><div id="bar"></div></div>
 
-<button class="toggle-storage-btn" onclick="toggleStoragePanel()">📦 Tampilkan/Sembunyikan Perhitungan Batas Penyimpanan 40%</button>
-<div class="storage-panel" id="storagePanel">
-<div class="storage-section">
+<!-- STORAGE SECTION - SELALU TAMPIL -->
+<div class="storage-section" id="storageSection">
 <div class="storage-title">🕐 Waktu Full ke Batas Penyimpanan 40% per Tier</div>
 <div id="storageContent"></div>
 <div class="storage-total-time">
 <div class="storage-total-time-label">Total Waktu untuk Full Semua Tier (40%)</div>
 <div class="storage-total-time-value" id="storageTotalTime">-</div>
-</div>
 </div>
 </div>
 </div>
@@ -781,9 +768,8 @@ function switchTab(tab){
 }
 
 function toggleStoragePanel(){
-  const panel=document.getElementById('storagePanel');
-  if(panel.classList.contains('show')) panel.classList.remove('show');
-  else { panel.classList.add('show'); hitungStorage(); }
+  // Fungsi tidak lagi diperlukan - storage selalu tampil
+  console.log('Storage panel is now always visible');
 }
 
 const levelData={
@@ -935,9 +921,6 @@ function hitungExp(){
 }
 
 function hitungStorage(){
-  const panel = document.getElementById('storagePanel');
-  if(!panel.classList.contains('show')) return;
-
   let o = lvl.options[lvl.selectedIndex];
   let T1 = Number(o.dataset.t1 || 0);
   let T2 = Number(o.dataset.t2 || 0);
@@ -954,43 +937,35 @@ function hitungStorage(){
   let timeT3 = limitT3 / sp;
   let totalTime = timeT1 + timeT2 + timeT3;
 
-  let html = `
-    <div class="storage-tier">
-      <div class="storage-tier-header">
-        <span class="storage-tier-name t1">📗 Tier 1 (T1)</span>
-        <span class="storage-tier-limit">Limit: ${limitT1.toLocaleString('id-ID')} / ${T1.toLocaleString('id-ID')} EXP</span>
-      </div>
-      <div class="storage-progress-wrap"><div class="storage-progress-bar t1" style="width:40%"></div></div>
-      <div class="storage-details">
-        <span>40% dari ${T1.toLocaleString('id-ID')}</span><span>Speed: ${sp}/detik</span>
-      </div>
-      <div class="storage-time">⏱️ ${waktu(timeT1)}</div>
-    </div>
-    <div class="storage-tier">
-      <div class="storage-tier-header">
-        <span class="storage-tier-name t2">📙 Tier 2 (T2)</span>
-        <span class="storage-tier-limit">Limit: ${limitT2.toLocaleString('id-ID')} / ${T2.toLocaleString('id-ID')} EXP</span>
-      </div>
-      <div class="storage-progress-wrap"><div class="storage-progress-bar t2" style="width:40%"></div></div>
-      <div class="storage-details">
-        <span>40% dari ${T2.toLocaleString('id-ID')}</span><span>Speed: ${sp}/detik</span>
-      </div>
-      <div class="storage-time">⏱️ ${waktu(timeT2)}</div>
-    </div>
-    <div class="storage-tier">
-      <div class="storage-tier-header">
-        <span class="storage-tier-name t3">📕 Tier 3 (T3)</span>
-        <span class="storage-tier-limit">Limit: ${limitT3.toLocaleString('id-ID')} / ${T3.toLocaleString('id-ID')} EXP</span>
-      </div>
-      <div class="storage-progress-wrap"><div class="storage-progress-bar t3" style="width:40%"></div></div>
-      <div class="storage-details">
-        <span>40% dari ${T3.toLocaleString('id-ID')}</span><span>Speed: ${sp}/detik</span>
-      </div>
-      <div class="storage-time">⏱️ ${waktu(timeT3)}</div>
-    </div>
-  `;
+  const content = document.getElementById('storageContent');
+  content.innerHTML = '';
 
-  document.getElementById('storageContent').innerHTML = html;
+  const tiers = [
+    {name: '📗 Tier 1 (T1)', cls: 't1', limit: limitT1, total: T1, time: timeT1},
+    {name: '📙 Tier 2 (T2)', cls: 't2', limit: limitT2, total: T2, time: timeT2},
+    {name: '📕 Tier 3 (T3)', cls: 't3', limit: limitT3, total: T3, time: timeT3}
+  ];
+
+  tiers.forEach(tier => {
+    const tierDiv = document.createElement('div');
+    tierDiv.className = 'storage-tier';
+    tierDiv.innerHTML = `
+      <div class="storage-tier-header">
+        <span class="storage-tier-name ${tier.cls}">${tier.name}</span>
+        <span class="storage-tier-limit">Limit: ${tier.limit.toLocaleString('id-ID')} / ${tier.total.toLocaleString('id-ID')} EXP</span>
+      </div>
+      <div class="storage-progress-wrap">
+        <div class="storage-progress-bar ${tier.cls}" style="width:40%"></div>
+      </div>
+      <div class="storage-details">
+        <span>40% dari ${tier.total.toLocaleString('id-ID')}</span>
+        <span>Speed: ${sp}/detik</span>
+      </div>
+      <div class="storage-time">⏱️ ${waktu(tier.time)}</div>
+    `;
+    content.appendChild(tierDiv);
+  });
+
   document.getElementById('storageTotalTime').innerText = waktu(totalTime);
 }
 
